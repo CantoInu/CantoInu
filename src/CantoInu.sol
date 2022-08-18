@@ -32,7 +32,7 @@ import "solmate/tokens/ERC20.sol";
 ⠀⠀⠀⠀⠀⠀⠛⢦⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⠴⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠲⠤⣤⣤⣤⣄⠀⠀⠀⠀⠀⠀⠀⢠⣤⣤⠤⠴⠒⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀                                                                                                                                                                               
 
- CantoInu is an experiment, there is no roadmap, there are no promises, it's not worth anything, you will lose all of your monies!
+ CantoInu is purely for entertaining, there is no roadmap, there are no promises, it's not worth anything, you will lose all of your monies!
 
 */
 
