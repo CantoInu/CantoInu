@@ -2,7 +2,6 @@
 pragma solidity 0.8.15;
 
 import "solmate/auth/Owned.sol";
-import "solmate/utils/ReentrancyGuard.sol";
 
 interface IERC20 {
     function transfer(address to, uint256 amount) external returns (bool);
@@ -28,12 +27,12 @@ interface IRouter {
     );
 }
 
-contract DogPound is Owned(msg.sender), ReentrancyGuard {
+contract DogPound is Owned(msg.sender) {
 
     uint256 constant RATE = 5_000_000_000; //
     uint256 constant MAX_CLAIM = 100 * 10**18; //maximum number of CANTO to be received
 
-    uint256 public cINU_REMAINING;
+    uint256 public cINU_FOR_LP;
 
     IERC20 public immutable cInu;
     IRouter public DEXRouter;
@@ -42,22 +41,21 @@ contract DogPound is Owned(msg.sender), ReentrancyGuard {
 
     constructor(address _cInu) {
         cInu = IERC20(_cInu);
-        cINU_REMAINING = 500_000_000_000_000 * 10**18; //max amount of cINU that this contract that can be claimed
+        cINU_FOR_LP = 431_000_000_000_000 * 10**18; //max amount of cINU that this contract that can be claimed
         DEXRouter = IRouter(0xa252eEE9BDe830Ca4793F054B506587027825a8e);
     }
 
     event LPAdded(uint amountToken, uint amountCANTO, uint liquidity);
 
-    receive() external payable nonReentrant() {
+    receive() external payable {
         require(msg.value <= MAX_CLAIM, "SENT_TOO_MUCH"); // user cannot send more than 100 CANTO
 
         uint256 amt_to_release = msg.value * RATE; // calculate how much cINU is to be sent
-        require(cINU_REMAINING >= amt_to_release, "INSUFFICIENT_CANTO_INU"); // make sure that there is enough cINU in this contract
+        require(cInu.balanceOf(address(this)) - cINU_FOR_LP >= amt_to_release, "INSUFFICIENT_CANTO_INU"); // make sure that there is enough cINU in this contract
 
         require((claims[msg.sender]+amt_to_release) <= RATE * MAX_CLAIM, "ALREADY_CLAIMED"); // make sure that the user has not already claimed more than 5bn cINU from this address
 
         unchecked{
-            cINU_REMAINING = cINU_REMAINING - amt_to_release;
             claims[msg.sender] += amt_to_release; // increase the counter for the amount being released in this transaction
         }
 
