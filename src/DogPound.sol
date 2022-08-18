@@ -3,6 +3,23 @@ pragma solidity 0.8.15;
 
 import "solmate/auth/Owned.sol";
 
+/* This contract is to help you adopt a few CantoInus.
+
+Users may send up to 100 CANTO directly to the contract to receive 5bn cINU per CANTO sent (i.e. max 500bn cINU). 
+
+By sending Canto tokens to this contract you understand that CantoInu and DogPound are unaudited and purely provided for entertainment purposes, 
+that the developers of these contracts have not provided financial or legal advice to you or anyone,
+and you accept full responsbility for your actions and no one else. 
+DogPound and CantoInu may not be used by individuals from any entity or individual under financial sanctions by the United States of America and/or the European Union (EU) or any member state of the EU. 
+
+By interacting with this contract you agree to hold harmless, defend and indemnify the developers from any and all claims made by you arising from injury or loss due to your use of CantoInu and/or DogPound.
+
+There are only minimal safety functions on this contract, and any tokens sent here should be considered permanently unrecoverable.
+
+Prepare to lose all of your money!
+
+*/
+
 interface IERC20 {
     function transfer(address to, uint256 amount) external returns (bool);
 
