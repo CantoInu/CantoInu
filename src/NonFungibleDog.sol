@@ -158,8 +158,6 @@ contract NonFungibleDog is ERC721Enumerable, Owned(msg.sender) {
         return nftData[tokenId].timesBurnt;
     }
 
-    event here(uint256 i);
-
     function getRank(uint256 tokenId) public view returns (uint256) {
         unchecked{
             uint256 totalIds = totalSupply();
