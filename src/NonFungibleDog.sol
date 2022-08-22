@@ -60,6 +60,7 @@ interface IRouter {
     function getAmountOut(uint amountIn, address tokenIn, address tokenOut) external view returns (uint amount, bool stable);
 
     function swapExactCANTOForTokens(uint amountOutMin, route[] calldata routes, address to, uint deadline) external payable returns (uint[] memory amounts);
+
 }
 
 interface IUri {
@@ -68,11 +69,11 @@ interface IUri {
 
 contract NonFungibleDog is ERC721Enumerable, Owned(msg.sender) {
 
-    ICINU cInu;
+    ICINU cInu = ICINU(0x7264610A66EcA758A8ce95CF11Ff5741E1fd0455);
     IRouter router = IRouter(0xa252eEE9BDe830Ca4793F054B506587027825a8e);
-    IUri uriReader;
+    IUri uriReader = IUri(0xa0f9B5146c46c6D85D38fDC9c562B77fB9e46998);
 
-    address wCANTO; // = 0x826551890Dc65655a0Aceca109aB11AbDbD7a07B;
+    address wCANTO = 0x826551890Dc65655a0Aceca109aB11AbDbD7a07B;
 
     uint256 BURN_RATE = 1_690_000_000;
 
@@ -83,17 +84,9 @@ contract NonFungibleDog is ERC721Enumerable, Owned(msg.sender) {
 
     NFTData[] public nftData;
 
-    constructor(
-        address _cInu,
-        address _wCanto,
-        address _uriReader
-    ) 
+    constructor() 
     ERC721("NON FUNGIBLE DOG", "WOOF") 
-    {
-        cInu = ICINU(_cInu);
-        wCANTO = _wCanto;
-        uriReader = IUri(_uriReader);
-    }
+    {}
 
     receive() external payable {
         uint256 _tokenId;
@@ -197,6 +190,7 @@ contract NonFungibleDog is ERC721Enumerable, Owned(msg.sender) {
     }
 
     function setRouter(address _router) public onlyOwner {
+        cInu.approve(address(_router), cInu.balanceOf(address(this)));
         router = IRouter(_router);
     }
 

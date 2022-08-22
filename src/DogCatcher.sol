@@ -3,6 +3,8 @@ pragma solidity 0.8.15;
 
 import "solmate/auth/Owned.sol";
 
+// deployed at: 0x2505619A065bc6Bf60906C0BB8A7BB1Ad48B6383
+
 interface ICINU {
     function transfer(address to, uint256 amount) external returns (bool);
 
@@ -15,10 +17,9 @@ interface ICINU {
 
 contract DogCatcher is Owned(msg.sender){
 
-    ICINU cInu;
+    ICINU cInu = ICINU(0x7264610A66EcA758A8ce95CF11Ff5741E1fd0455);
 
-    constructor(address _cInu){
-        cInu = ICINU(_cInu);
+    constructor(){
     }
 
     function addLiquidityCANTO(
@@ -44,7 +45,6 @@ contract DogCatcher is Owned(msg.sender){
     function retrieveCINU(address to, uint256 amt) external onlyOwner {
         cInu.transfer(to, amt);
     }
-
 
 
 }
