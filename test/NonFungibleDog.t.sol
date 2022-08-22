@@ -4,6 +4,7 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "../src/CantoInu.sol";
 import "../src/NonFungibleDog.sol";
+import "../src/PlaceHolderURI.sol";
 
 import "./wCanto.sol";
 
@@ -23,6 +24,7 @@ contract NonFungibleDogTest is Test {
     BaseV1Router01 public router; 
     CantoInu public cInu;
     NonFungibleDog public nft;
+    placeHolderURI public uri;
 
     WCANTO public wCanto;
     ERC20Test public note;
@@ -32,6 +34,8 @@ contract NonFungibleDogTest is Test {
     address Alice = address(0xa11ce);
 
     function setUp() public {
+
+        
         vm.startPrank(admin);
         factory = new BaseV1Factory();
         wCanto = new WCANTO();
@@ -40,9 +44,13 @@ contract NonFungibleDogTest is Test {
         router = new BaseV1Router01(address(factory), address(wCanto), address(note), admin);
         vm.stopPrank();
 
+        vm.deal(Bob, 100*10**18);
+
         vm.startPrank(Bob);
         cInu = new CantoInu();
-        nft = new NonFungibleDog(address(cInu), address(wCanto), address(0));
+        uri = new placeHolderURI();
+        nft = new NonFungibleDog(address(cInu), address(wCanto), address(uri));
+        nft.setRouter(address(router));
         cInu.transfer(address(nft), 430_500_000_000_000 * 10**18);
         cInu.transfer(Alice, 500_000_000 * 10**18);
         vm.stopPrank();
@@ -205,8 +213,68 @@ contract NonFungibleDogTest is Test {
 
     }
 
+    function testUri() public {
+
+        vm.deal(Alice, 1000*10**18);
+
+        vm.startPrank(Alice);
+
+        payable(nft).call{gas: 200_000, value: 10*10**18}("");
+
+        assertEq(nft.tokenURI(0), "ipfs://QmSbjatwbq552s4ZUfX55tbDGyQRzG2nrvDtCK9fEyy24k");
+    }
+
     function testTrade() public {
 
+        vm.deal(Alice, 1000*10**18);
+
+        vm.startPrank(Alice);
+
+        payable(nft).call{gas: 200_000, value: 10*10**18}("");
+
+        assertEq(nft.balanceOf(Alice),1);
+        assertEq(nft.ownerOf(0),Alice);
+
+        uint256 burntAlice = 1_690_000_000 * 10*10**18;
+        assertEq(cInu.totalSupply(), 1_000_000_000_000_000 * 10**18-burntAlice);
+        assertEq(cInu.balanceOf(Alice), 500_000_000 * 10**18);
+        assertEq(cInu.balanceOf(address(nft)), 430_500_000_000_000 * 10**18-burntAlice);
+
+        vm.stopPrank();
+        vm.roll(10);
+
+        vm.startPrank(Bob);
+
+        IBaseV1Pair lpPairToken = IBaseV1Pair(router.pairFor(address(cInu), address(wCanto), false));
+
+        cInu.approve(address(router), 1_000_000_000 * 10**18);
+        
+        router.addLiquidityCANTO{value: 51*10**18}(
+            address(cInu),
+            false,
+            100_000_000 * 10**18,
+            100_000_000 * 10**18,
+            50 * 10**18,
+            Bob,
+            block.timestamp + 3600
+        );
+
+        vm.roll(20);
+
+        uint balanceBefore = cInu.balanceOf(address(nft));
+
+        (uint amount, bool stable) = router.getAmountOut(10*10**18, address(wCanto), address(cInu));
+
+        uint minAmt = nft.estimateAmount(10*10**18);
+
+        assertEq(minAmt, amount);
+
+        nft.justMarketBuy(minAmt, 10*10**18);
+
+        assertEq(wCanto.balanceOf(address(lpPairToken)), 61*10**18);
+        assertEq(balanceBefore+minAmt, cInu.balanceOf(address(nft)));
+
+        vm.stopPrank();
 
     }
 
