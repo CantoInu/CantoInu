@@ -7,3 +7,6 @@
 [submodule "lib/Lending"]
 	path = lib/Lending
 	url = https://github.com/Canto-Network/Lending
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/Openzeppelin/openzeppelin-contracts
