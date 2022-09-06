@@ -69,7 +69,7 @@ interface IUri {
 
 contract NonFungibleDog is ERC721Enumerable, Owned(msg.sender) {
 
-    ICINU cInu = ICINU(0x7264610A66EcA758A8ce95CF11Ff5741E1fd0455);
+    ICINU cInu;// = ICINU(0x7264610A66EcA758A8ce95CF11Ff5741E1fd0455);
     IRouter router = IRouter(0xa252eEE9BDe830Ca4793F054B506587027825a8e);
     IUri uriReader = IUri(0xa0f9B5146c46c6D85D38fDC9c562B77fB9e46998);
 
@@ -84,10 +84,13 @@ contract NonFungibleDog is ERC721Enumerable, Owned(msg.sender) {
 
     NFTData[] public nftData;
 
-    constructor() 
+    constructor(address _cInu) 
     ERC721("NON FUNGIBLE DOG", "WOOF") 
-    {}
+    {
+        cInu = ICINU(_cInu);
+    }
 
+    // will return an error if there are insufficient cINU in the contract to burn
     receive() external payable {
         uint256 _tokenId;
         uint256 _amtToBurn = msg.value * BURN_RATE;

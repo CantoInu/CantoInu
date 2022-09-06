@@ -16,7 +16,7 @@ contract DogCatcherTest is Test {
        vm.startPrank(address(0xa11ce));
        cINU = new CantoInu();
        pound = new DogPound(address(cINU));
-       catcher = new DogCatcher(address(cINU));
+       catcher = new DogCatcher();
        cINU.transfer(address(pound), 931_000_000_000_000 * 10**18);
        vm.stopPrank();
     }
