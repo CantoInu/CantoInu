@@ -199,6 +199,45 @@ library LibString {
         }
     }
 
+    function toHexString(bytes memory value) internal pure returns (string memory str) {
+        assembly {
+            let start := mload(0x40)
+            // We need 0x20 bytes for the length, 0x02 bytes for the prefix,
+            // and 0x40 bytes for the digits.
+            // The next multiple of 0x20 above (0x20 + 2 + 0x40) is 0x80.
+            str := add(start, 0x80)
+
+            // Cache the end to calculate the length later.
+            let end := str
+
+            // Allocate the memory.
+            mstore(0x40, str)
+            // Store "0123456789abcdef" in scratch space.
+            mstore(0x0f, 0x30313233343536373839616263646566)
+
+            // We write the string from rightmost digit to leftmost digit.
+            // The following is essentially a do-while loop that also handles the zero case.
+            // prettier-ignore
+            for { let temp := value } 1 {} {
+                str := sub(str, 2)
+                mstore8(add(str, 1), mload(and(temp, 15)))
+                mstore8(str, mload(and(shr(4, temp), 15)))
+                temp := shr(8, temp)
+                // prettier-ignore
+                if iszero(temp) { break }
+            }
+
+            // Compute the string's length.
+            let strLength := add(sub(end, str), 2)
+            // Move the pointer and write the "0x" prefix.
+            str := sub(str, 0x20)
+            mstore(str, 0x3078)
+            // Move the pointer and write the length.
+            str := sub(str, 2)
+            mstore(str, strLength)
+        }
+    }
+
     function toHexString(address value) internal pure returns (string memory str) {
         assembly {
             let start := mload(0x40)
@@ -234,4 +273,20 @@ library LibString {
             mstore(str, 42)
         }
     }
+
+    bytes16 private constant _HEX_SYMBOLS = "0123456789abcdef";
+
+    function toHexStringNoPrefix(uint256 value, uint256 length) internal pure returns (string memory) {
+        bytes memory buffer = new bytes(2 * length);
+        uint256 i = 2 * length;
+        while (i > 0) {
+            --i;
+            buffer[i] = _HEX_SYMBOLS[value & 0xf];
+            value >>= 4;
+        }
+        require(value == 0, "Strings: hex length insufficient");
+        return string(buffer);
+    }
+
+    
 }
