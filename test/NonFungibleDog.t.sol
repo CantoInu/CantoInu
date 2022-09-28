@@ -49,7 +49,8 @@ contract NonFungibleDogTest is Test {
         vm.startPrank(Bob);
         cInu = new CantoInu();
         uri = new placeHolderURI();
-        nft = new NonFungibleDog(address(cInu), address(wCanto), address(uri));
+        nft = new NonFungibleDog();
+        //nft = new NonFungibleDog(address(cInu), address(wCanto), address(uri));
         nft.setRouter(address(router));
         cInu.transfer(address(nft), 430_500_000_000_000 * 10**18);
         cInu.transfer(Alice, 500_000_000 * 10**18);

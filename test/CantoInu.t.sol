@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity 0.8.15;
 
 import "forge-std/Test.sol";
 import "../src/CantoInu.sol";
@@ -9,6 +9,13 @@ contract CantoInuTest is Test {
     
     function setUp() public {
        cINU = new CantoInu();
+    }
+
+    function testGetByteCode() public {
+        emit log_bytes(type(CantoInu).creationCode);
+        emit log_bytes(address(cINU).code);
+
+
     }
 
     function testInvariantMetaData() public {
