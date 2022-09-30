@@ -70,7 +70,7 @@ contract RouterTest is Test {
 
         vm.stopPrank();
 
-        emit log_uint(lpPairToken.balanceOf(Bob));
+        //emit log_uint(lpPairToken.balanceOf(Bob));
     }
 
     function testMintOutAndAddLiquidity() public {
@@ -91,7 +91,7 @@ contract RouterTest is Test {
             pound.fillLP();
             assertEq(address(pound).balance, 0);
             assertEq(cInu.balanceOf(address(pound)), 0);
-            emit log_uint(lpPairToken.balanceOf(address(pound)));
+            //emit log_uint(lpPairToken.balanceOf(address(pound)));
 
         vm.stopPrank();
 
