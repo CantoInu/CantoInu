@@ -14,7 +14,8 @@ contract NFT_leaderboardTest is Test {
     function setUp() public {
     }
 
-    function testGrabBurnt() public {
+    //leave this off to not accidently call when not needed
+    function OFF_testGrabBurnt() public {
         uint256 len = nft.totalSupply();
 
         for(uint i = 0; i<len; i++) {

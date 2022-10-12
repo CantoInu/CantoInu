@@ -60,10 +60,10 @@ contract DogBowl is ERC20, Owned(msg.sender) {
 
     uint256 public initTimeStamp;
 
-    uint256 constant INITIAL_EXTRACTION_CUT         = 50; //50% of WETH | 25% of LP value
-    address constant NON_FUNGIBLE_DOG       = 0xDE7Aa2B085bef0d752AA61058837827247Cc5253;
-    address constant CINU                   = 0x7264610A66EcA758A8ce95CF11Ff5741E1fd0455;
-    address constant WCANTO                 = 0x826551890Dc65655a0Aceca109aB11AbDbD7a07B;
+    uint256 constant INITIAL_EXTRACTION_CUT        = 50; //50% of WETH | 25% of LP value
+    address public constant NON_FUNGIBLE_DOG       = 0xDE7Aa2B085bef0d752AA61058837827247Cc5253;
+    address public constant CINU                   = 0x7264610A66EcA758A8ce95CF11Ff5741E1fd0455;
+    address public constant WCANTO                 = 0x826551890Dc65655a0Aceca109aB11AbDbD7a07B;
     
     constructor(
         address _router, 
