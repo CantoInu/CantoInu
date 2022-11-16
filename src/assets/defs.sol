@@ -47,20 +47,18 @@ contract DEFS {
     }
 
     function getAttrName(uint8 _eyeAttr) internal pure returns (string memory) {
-        if (_eyeAttr != 255) {
-            if(_eyeAttr == 0) {
-                return 'noSecondBest';
-            } else if(_eyeAttr == 1) {
-                return 'dealWithIt';
-            } else if(_eyeAttr == 2) {
-                return 'nounder';
-            } else {
-                return 'milady';
-            } 
-        }
+        if(_eyeAttr == 0) {
+            return 'noSecondBest';
+        } else if(_eyeAttr == 1) {
+            return 'dealWithIt';
+        } else if(_eyeAttr == 2) {
+            return 'nounder';
+        } else {
+            return 'milady';
+        } 
     }
 
-    function getAttributePlacements(uint8 eyeAttr, bool amplice) public view returns (string memory useStr) {
+    function getAttributePlacements(uint8 eyeAttr, bool amplice) public pure returns (string memory useStr) {
 
         if(eyeAttr != 255) {
             useStr = string.concat(
@@ -81,7 +79,7 @@ contract DEFS {
     }
         
     // starting with common base def assets
-    function buildDefs(uint8 eyeAttr, bool amplice) public returns (string memory) {
+    function buildDefs(uint8 eyeAttr, bool amplice) public pure returns (string memory) {
 
         return string.concat(
             '<defs>',

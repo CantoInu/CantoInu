@@ -7,6 +7,8 @@ import {DOG} from "./assets/dog.sol";
 import {LibString, Base64} from "./utils/utils.sol";
 import {libDogEffects} from "./libs/libDogEffects.sol";
 
+import "forge-std/console.sol";
+
 interface ICInu {
     function totalSupply() external view returns (uint256);
 }
@@ -40,7 +42,7 @@ interface IDog {
 contract dogURI{
     using LibString for uint256;
 
-    string public DNAJuice;
+    string public constant DNAJuice = "1668594201";
 
     IAmpliceGhoul public immutable ampliceGhoul;// = IAmpliceGhoul(0x81996BD9761467202c34141B63B3A7F50D387B6a);
     INonFungibleDog public immutable nonFungibleDog;// = INonFungibleDog(0x81996BD9761467202c34141B63B3A7F50D387B6a);
@@ -168,11 +170,11 @@ contract dogURI{
         unicode"💣"
     ];
 
-    function random(string memory input) internal pure returns (uint256) {
+    function random(string memory input) public pure returns (uint256) {
         return uint256(keccak256(abi.encodePacked(input)));
     }
 
-    function bg_colour_idx(uint256 _burn) internal view returns (uint8) {
+    function bg_colour_idx(uint256 _burn) public view returns (uint8) {
         if (_burn > borderLvlAmts[0]) {
             return 0;
         } else if (_burn > borderLvlAmts[1]) {
@@ -186,7 +188,7 @@ contract dogURI{
         }
     }
 
-    function attributify(uint256 _id, bool _amplice) internal view returns (DOG_ATTR memory _attr) {
+    function attributify(uint256 _id, bool _amplice) public view returns (DOG_ATTR memory _attr) {
         
         bytes32 dogDna = bytes32(random(string.concat(_id.toString(),DNAJuice)));
          /*//dogDNA is a tightly packed array of bytes used to assign NFT attributes, info arranged as follows:
@@ -221,24 +223,24 @@ contract dogURI{
         });
     }
 
-    function word_attr(DOG_ATTR memory _attr) internal view {
+    function word_attr(DOG_ATTR memory _attr) public view {
         if(_attr.words_text > 127) {
             _attr.words_text %= uint8(words.length);
-            _attr.words_color %= uint8((colors.length-2));
+            _attr.words_color %= uint8(colors.length-2);
         } else {
             _attr.words_text = 255;
             _attr.words_color = 255;
         }
     }
 
-    function dog_attr(DOG_ATTR memory _attr) internal pure {
+    function dog_attr(DOG_ATTR memory _attr) public pure {
         _attr.eyes > 127 ? _attr.eyes %= 4 : _attr.eyes = 255;
         _attr.filters > 127 ? _attr.filters %= 6 : _attr.filters = 255;
         _attr.chewToys > 64 ? _attr.chewToys %= 18 : _attr.chewToys = 255;
         _attr.animation > 127 ? _attr.animation %= 10 : _attr.animation = 255;
     }   
 
-    function attributes(uint256 id, bool amplice) internal view returns (DOG_ATTR memory attr) {
+    function attributes(uint256 id, bool amplice) public view returns (DOG_ATTR memory attr) {
 
         attr = attributify(id, amplice);
 
@@ -248,7 +250,7 @@ contract dogURI{
 
     }
 
-    function initializeState(uint256 id) internal view returns (SVG_STATE memory s) {
+    function initializeState(uint256 id) public view returns (SVG_STATE memory s) {
 
 
         STATS_DATA memory tokenInfo = STATS_DATA(
@@ -272,7 +274,7 @@ contract dogURI{
         );
     }
 
-    function createStats(SVG_STATE memory s) internal view returns (string memory statsStr) {
+    function createStats(SVG_STATE memory s) public view returns (string memory statsStr) {
 
         statsStr = string.concat(
             '<g class="stats"><text x="33" y="40">NFT ID: ',
@@ -287,12 +289,12 @@ contract dogURI{
         return statsStr;
     }
 
-    function writeDefs(SVG_STATE memory s) internal view {
+    function writeDefs(SVG_STATE memory s) public view {
         s.img.defs = defs.buildDefs(s.attr.eyes, s.attr.amplice);
 
     }
 
-    function writeBG(SVG_STATE memory s) internal view {
+    function writeBG(SVG_STATE memory s) public view {
 
         s.img.bgElement = string.concat(
             defs.getBackground(borderLvlColors[s.attr.bg_color], colors[s.attr.noise_color]),
@@ -302,8 +304,12 @@ contract dogURI{
 
     }
 
-    function writeDog(SVG_STATE memory s) internal view {
+    function writeDog(SVG_STATE memory s) public view {
         string memory dogEl = '<g id="dog">';
+
+        console.log(s.attr.chewToys);
+        console.log(s.attr.dog_color);
+        console.log(s.attr.words_text);
 
         if (s.attr.chewToys == 255) {
             dogEl = string.concat(
@@ -335,11 +341,15 @@ contract dogURI{
     }
 
     
-    function returnImg(SVG_STATE memory s) internal view returns (string memory) {
+    function returnImg(SVG_STATE memory s) public view returns (string memory) {
                 
         writeDefs(s);
 
         writeBG(s);
+
+        console.log("Defs and BG Done");
+
+        console.logUint(s.attr.goodBoy_text);
 
         if(s.attr.goodBoy_text != 8) {
             writeDog(s);
@@ -347,6 +357,7 @@ contract dogURI{
             defs.getAttributePlacements(255, s.attr.amplice);
         }
         
+        console.log("Dog done");
 
         return string.concat(
             s.img.defs,
@@ -395,7 +406,7 @@ contract dogURI{
             nonFungibleDog = INonFungibleDog(_nft);
             ampliceGhoul = IAmpliceGhoul(_amplice);
 
-            DNAJuice = block.timestamp.toString();
+            //DNAJuice = block.timestamp.toString();
         }  
 
 }

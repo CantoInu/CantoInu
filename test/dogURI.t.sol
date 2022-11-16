@@ -34,7 +34,7 @@ contract dogURITest is Test {
         ampliceNFT = new AmpliceGhouls();
         def = new DEFS();
         dog = new DOG();
-        uri = new dogURI(address(dogNFT), address(ampliceNFT), address(def), address(dog));
+        uri = new dogURI(address(def), address(dog), address(dogNFT), address(ampliceNFT));
 
         cInu.transfer(address(dogNFT), 830_500_000_000_000 * 10**18);
 

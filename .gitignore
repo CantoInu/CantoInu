@@ -8,6 +8,3 @@ out/
 !/broadcast
 /broadcast/*
 /broadcast/*/31337/
-
-# Ignore website node files
-/cantoinu-www/node_modules
