@@ -16,3 +16,7 @@ forge verify-check --chain-id 7700 --verifier-url https://evm.explorer.canto.io/
 
 
 cast call 0xface03c10ab2a8bb8df208f274a42d2d510d5baf --rpc-url $RPC_URL "uri(uint256)" 1
+
+
+
+forge verify-contract 0x826551890Dc65655a0Aceca109aB11AbDbD7a07B test/wCanto.sol:WCANTO --constructor-args $(cast abi-encode "constructor(string,string)" "wCanto" "WCANTO") --chain-id 7700 --verifier-url https://evm.explorer.canto.io/api --verifier blockscout --watch
