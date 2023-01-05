@@ -15,4 +15,21 @@ forge verify-check --chain-id 7700 --verifier-url https://evm.explorer.canto.io/
 
 
 
+
 cast call 0xface03c10ab2a8bb8df208f274a42d2d510d5baf --rpc-url $RPC_URL "uri(uint256)" 1
+
+
+
+forge verify-contract 0x826551890Dc65655a0Aceca109aB11AbDbD7a07B test/wCanto.sol:WCANTO --constructor-args $(cast abi-encode "constructor(string,string)" "wCanto" "WCANTO") --chain-id 7700 --verifier-url https://evm.explorer.canto.io/api --verifier blockscout --watch
+
+
+dogUri
+
+ Defs = DEFS(0x5Ea2D88C9Cc8593DEBA1484b03B22f44bC42590A);
+        Dog = DOG(0x494E14191aFfE84cDF37877AC880B911da9A06C6);
+
+        Uri = new dogURI(address(Defs), address(Dog), 0xDE7Aa2B085bef0d752AA61058837827247Cc5253, 0x81996BD9761467202c34141B63B3A7F50D387B6a);
+
+forge verify-contract 0xa0f9B5146c46c6D85D38fDC9c562B77fB9e46998 src/dogURI.flat.sol:dogURI --constructor-args $(cast abi-encode "constructor(address,address,address,address)" 0x5Ea2D88C9Cc8593DEBA1484b03B22f44bC42590A 0x494E14191aFfE84cDF37877AC880B911da9A06C6 0xDE7Aa2B085bef0d752AA61058837827247Cc5253 0x81996BD9761467202c34141B63B3A7F50D387B6a) --chain-id 7700 --verifier-url https://evm.explorer.canto.io/api --verifier blockscout --watch
+cast call 0xface03c10ab2a8bb8df208f274a42d2d510d5baf --rpc-url $RPC_URL "uri(uint256)" 1
+
