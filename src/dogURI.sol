@@ -42,8 +42,8 @@ contract dogURI{
 
     string public DNAJuice;
 
-    IAmpliceGhoul public immutable ampliceGhoul;// = IAmpliceGhoul(0x81996BD9761467202c34141B63B3A7F50D387B6a);
-    INonFungibleDog public immutable nonFungibleDog;// = INonFungibleDog(0x81996BD9761467202c34141B63B3A7F50D387B6a);
+    IAmpliceGhoul public immutable ampliceGhoul;
+    INonFungibleDog public immutable nonFungibleDog;
     IDefs public immutable defs;
     IDog public immutable dog;
 
@@ -294,9 +294,11 @@ contract dogURI{
 
     function writeBG(SVG_STATE memory s) internal view {
 
+        uint256 pngCnt = s.stats.burnTimesCount > 19? 20 : s.stats.burnTimesCount;
+
         s.img.bgElement = string.concat(
             defs.getBackground(borderLvlColors[s.attr.bg_color], colors[s.attr.noise_color]),
-            defs.createPNGs(s.stats.burnTimesCount),
+            defs.createPNGs(pngCnt),
             createStats(s)
         );
 
@@ -395,7 +397,7 @@ contract dogURI{
             nonFungibleDog = INonFungibleDog(_nft);
             ampliceGhoul = IAmpliceGhoul(_amplice);
 
-            DNAJuice = block.timestamp.toString();
+            DNAJuice = "1668602588";
         }  
 
 }
