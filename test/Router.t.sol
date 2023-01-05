@@ -5,10 +5,10 @@ import "forge-std/Test.sol";
 import "../src/CantoInu.sol";
 import "../src/DogPound.sol";
 
-import "./wCanto.sol";
+import {WETH} from "./wCanto.sol";
 
 import "Lending/Swap/BaseV1-core.sol";
-import "Lending/Swap/BaseV1-periphery.sol";
+import {BaseV1Router01, IBaseV1Pair} from "Lending/Swap/BaseV1-periphery.sol";
 
 contract ERC20Test is ERC20 {
     constructor(string memory name, string memory symbol, uint256 totalSup, uint8 decimals) ERC20(name, symbol, decimals) {}
@@ -24,7 +24,7 @@ contract RouterTest is Test {
     CantoInu public cInu;
     DogPound public pound;
 
-    WCANTO public wCanto;
+    WETH public wCanto;
     ERC20Test public note;
 
     address public admin = address(1);
@@ -33,7 +33,7 @@ contract RouterTest is Test {
     function setUp() public {
         vm.startPrank(admin);
         factory = new BaseV1Factory();
-        wCanto = new WCANTO();
+        wCanto = new WETH("wcanto", "wcanto");
         note = new ERC20Test("note", "note", 10000*10**18, 18);
 
         router = new BaseV1Router01(address(factory), address(wCanto), address(note), admin);

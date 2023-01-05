@@ -84,10 +84,13 @@ contract NonFungibleDog is ERC721Enumerable, Owned(msg.sender) {
 
     NFTData[] public nftData;
 
-    constructor() 
+    constructor(address _cInu) 
     ERC721("NON FUNGIBLE DOG", "WOOF") 
-    {}
+    {
+        cInu = ICINU(_cInu);
+    }
 
+    // will return an error if there are insufficient cINU in the contract to burn
     receive() external payable {
         uint256 _tokenId;
         uint256 _amtToBurn = msg.value * BURN_RATE;
