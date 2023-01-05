@@ -4,9 +4,9 @@
 [submodule "lib/solmate"]
 	path = lib/solmate
 	url = https://github.com/transmissions11/solmate
-[submodule "lib/Lending"]
-	path = lib/Lending
-	url = https://github.com/Canto-Network/Lending
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/Openzeppelin/openzeppelin-contracts
+[submodule "lib/clm"]
+	path = lib/clm
+	url = https://github.com/Canto-Network/clm/tree/7a734186ac773a8e53c55c07c5ec32d32a528b4a
