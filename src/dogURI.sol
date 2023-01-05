@@ -399,5 +399,4 @@ contract dogURI{
 
             DNAJuice = "1668602588";
         }  
-
 }
